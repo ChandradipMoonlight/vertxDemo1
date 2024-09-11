@@ -1,4 +1,4 @@
-package org.example;
+package org.example.controller;
 
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;

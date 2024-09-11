@@ -4,9 +4,12 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import org.example.controller.AppController;
+import org.example.repository.DbConnection;
+
+import java.util.concurrent.CompletableFuture;
 
 public class MainVerticle extends AbstractVerticle {
 
@@ -20,12 +23,20 @@ public class MainVerticle extends AbstractVerticle {
                 handler.cause().printStackTrace();
             }
         });
+        CompletableFuture.runAsync(()-> {
+            DbConnection.initSqlConnection();
+        });
     }
 
     @Override
     public void start(Promise<Void> promise) throws Exception {
+
+
+        ConfigManager.mainConfig=config();
+
+        System.out.println("sqlCredential : "+ ConfigManager.getSqlConfig().encodePrettily());
+
         int port = 8081;
-        super.start();
 
         AppController controller = new AppController();
 
@@ -37,6 +48,7 @@ public class MainVerticle extends AbstractVerticle {
         router.get("/check").handler(controller::checkSta);
 
 
+
 //        router.get("/check").handler(context -> {
 //            JsonObject json = new JsonObject();
 //            json.put("name", "chandradip");
@@ -45,8 +57,7 @@ public class MainVerticle extends AbstractVerticle {
 //                    .end(json.encode());
 //        });
 
-        vertx.createHttpServer()
-                .requestHandler(router)
+        vertx.createHttpServer().requestHandler(router)
                 .listen(port, handle -> {
                     if (handle.succeeded()) {
                         System.out.println("Vertical is started on port : "+port);
@@ -56,6 +67,7 @@ public class MainVerticle extends AbstractVerticle {
                         promise.fail(handle.cause());
                     }
                 });
+        DbConnection.initSqlConnection();
 
     }
 

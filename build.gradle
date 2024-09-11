@@ -1,9 +1,17 @@
 plugins {
     id 'java'
+    id 'io.ebean' version '12.7.2'
 }
+
+
+
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
+
+def mainVerticleName = 'org.example.MainVerticle'
+def watchForChange = 'src/**/*'
+def doOnChange = './gradlew classes'
 
 repositories {
     mavenCentral()
@@ -18,10 +26,20 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     implementation("io.netty:netty-resolver-dns-native-macos:4.1.95.Final:osx-aarch_64") // Add this line
-
-
+    implementation("com.mysql:mysql-connector-j:8.3.0")
+    implementation("io.ebean:ebean:12.7.2")
 }
 
 test {
     useJUnitPlatform()
+}
+
+task run(type: JavaExec) {
+    main = 'io.vertx.core.Launcher' // Main class
+    classpath = sourceSets.main.runtimeClasspath
+    args = ['run', mainVerticleName,
+            "-conf /Users/moonlight/workspace/practice/vertxWebAppDemo1/src/main/resources/config.json",
+            "--redeploy=src/**/*",
+            "--launcher-class=io.vertx.core.Launcher",
+            "--on-redeploy=./gradlew classes"]
 }
