@@ -28,6 +28,9 @@ dependencies {
     implementation("io.netty:netty-resolver-dns-native-macos:4.1.95.Final:osx-aarch_64") // Add this line
     implementation("com.mysql:mysql-connector-j:8.3.0")
     implementation("io.ebean:ebean:12.7.2")
+
+    implementation("com.google.code.gson:gson:2.8.8")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.9.9")
 }
 
 test {

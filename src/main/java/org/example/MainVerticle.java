@@ -6,6 +6,7 @@ import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import org.example.controller.AddEmployeeController;
 import org.example.controller.AppController;
 import org.example.repository.DbConnection;
 
@@ -31,44 +32,32 @@ public class MainVerticle extends AbstractVerticle {
     @Override
     public void start(Promise<Void> promise) throws Exception {
 
-
         ConfigManager.mainConfig=config();
 
-        System.out.println("sqlCredential : "+ ConfigManager.getSqlConfig().encodePrettily());
-
-        int port = 8081;
-
-        AppController controller = new AppController();
 
         Router router = Router.router(vertx);
-
         router.route().handler(BodyHandler.create());
 
-//        router.get("/check").handler(context ->controller.checkSta(context));
-        router.get("/check").handler(controller::checkSta);
-
-
-
-//        router.get("/check").handler(context -> {
-//            JsonObject json = new JsonObject();
-//            json.put("name", "chandradip");
-//            json.put("message", "success");
-//            context.response().putHeader("content-type", "application/json")
-//                    .end(json.encode());
-//        });
+        httpRouting(router);
 
         vertx.createHttpServer().requestHandler(router)
-                .listen(port, handle -> {
+                .listen(ConfigManager.mainConfig.getInteger("port"), handle -> {
                     if (handle.succeeded()) {
-                        System.out.println("Vertical is started on port : "+port);
+                        System.out.println("Vertical is started on port : "+ConfigManager.mainConfig.getInteger("port"));
                         promise.complete();
                     } else {
                         System.out.println("Error in deployed vertical");
                         promise.fail(handle.cause());
                     }
                 });
+        //db connection initialization
         DbConnection.initSqlConnection();
 
+    }
+
+    private void httpRouting(Router router) {
+        router.get("/check").handler(AppController::checkSta);
+        router.post("/employee/add").handler(AddEmployeeController::handle);
     }
 
 }

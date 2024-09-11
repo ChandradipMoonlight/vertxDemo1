@@ -11,12 +11,12 @@ import org.example.ConfigManager;
 
 public class DbConnection {
 
-    private static Database sqlDb;
+    public static Database sqlDb;
 
     private static DataSourceConfig dataSourceConfig() {
         // getting sql credential from config.json file
         JsonObject sqlConfig = ConfigManager.getSqlConfig();
-        System.out.println("sql :" +sqlConfig);
+        System.out.println("sql Credential :" +sqlConfig.encodePrettily());
         DataSourceConfig config = new DataSourceConfig();
         config.setUrl(sqlConfig.getString("url"));
         config.setDriver(sqlConfig.getString("driver"));

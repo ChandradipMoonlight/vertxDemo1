@@ -6,7 +6,7 @@ import io.vertx.ext.web.RoutingContext;
 
 public class AppController {
 
-    public void checkSta(RoutingContext context) {
+    public static void checkSta(RoutingContext context) {
         JsonArray array = new JsonArray();
         array.add("Java");
         array.add("MySqL");
