@@ -8,6 +8,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import org.example.controller.AddEmployeeController;
 import org.example.controller.AppController;
+import org.example.controller.GetEmployeeController;
 import org.example.repository.DbConnection;
 
 import java.util.concurrent.CompletableFuture;
@@ -58,6 +59,7 @@ public class MainVerticle extends AbstractVerticle {
     private void httpRouting(Router router) {
         router.get("/check").handler(AppController::checkSta);
         router.post("/employee/add").handler(AddEmployeeController::handle);
+        router.get("/employee/details").handler(GetEmployeeController::handle);
     }
 
 }
