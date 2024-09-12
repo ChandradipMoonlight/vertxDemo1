@@ -17,7 +17,7 @@ public class GetEmployeeController {
             System.out.println("Request Id :  "+employeeId);
             Integer id = Integer.valueOf(employeeId);
             // parsing string to int
-            Employee employee = DbConnection.sqlDb.find(Employee.class, id);
+            Employee employee = DbConnection.sqlDb.find(Employee.class, id); // find by id form employee table
             if (employee==null) {
                 throw new CustomException("Employee not found");
             }
